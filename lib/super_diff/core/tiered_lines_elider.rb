@@ -108,10 +108,8 @@ module SuperDiff
       end
 
       def all_indentation_levels
-        lines
-          .map(&:indentation_level)
-          .select(&:positive?)
-          .uniq
+        levels = lines.map(&:indentation_level).uniq
+        normalized_indentation_levels(levels)
       end
 
       def find_boxes_to_elide_within(pane)
@@ -146,13 +144,10 @@ module SuperDiff
       def box_groups_at_decreasing_indentation_levels_within(pane)
         boxes_within_pane = boxes.select { |box| box.fits_fully_within?(pane) }
 
+        levels = boxes_within_pane.map(&:indentation_level).uniq
+
         possible_indentation_levels =
-          boxes_within_pane
-          .map(&:indentation_level)
-          .select(&:positive?)
-          .uniq
-          .sort
-          .reverse
+          normalized_indentation_levels(levels).sort.reverse
 
         possible_indentation_levels.map do |indentation_level|
           boxes_within_pane.select do |box|
@@ -172,6 +167,14 @@ module SuperDiff
             !box1.equal?(box2) && box1.fully_contains?(box2)
           end
         end
+      end
+
+      def normalized_indentation_levels(levels)
+        # For flat structures (strings), include level 0
+        return levels if levels.all?(&:zero?)
+
+        # For nested structures (arrays, hashes), exclude level 0 (brackets)
+        levels.select(&:positive?)
       end
 
       def combine_congruent_boxes(boxes)

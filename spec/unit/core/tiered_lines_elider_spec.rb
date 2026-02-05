@@ -311,6 +311,94 @@ RSpec.describe SuperDiff::Core::TieredLinesElider, type: :unit do
           end
 
           context 'and the line tree contains non-noops in addition to noops' do
+            context 'and the line tree is flat (indentation level 0)' do
+              it 'elides the beginning of the noop so as to put it at the maximum' do
+                # Diff:
+                #
+                #   "one"
+                #   "two"
+                #   "three"
+                # - "four"
+                # + "FOUR"
+
+                lines = [
+                  an_actual_line(
+                    type: :noop,
+                    indentation_level: 0,
+                    value: %("one")
+                  ),
+                  an_actual_line(
+                    type: :noop,
+                    indentation_level: 0,
+                    value: %("two")
+                  ),
+                  an_actual_line(
+                    type: :noop,
+                    indentation_level: 0,
+                    value: %("three")
+                  ),
+                  an_actual_line(
+                    type: :delete,
+                    indentation_level: 0,
+                    value: %("four")
+                  ),
+                  an_actual_line(
+                    type: :insert,
+                    indentation_level: 0,
+                    value: %("FOUR")
+                  )
+                ]
+
+                line_tree_with_elisions =
+                  with_configuration(
+                    diff_elision_enabled: true,
+                    diff_elision_maximum: 2
+                  ) { described_class.call(lines) }
+
+                # Result:
+                #
+                #   # ...
+                #   "three"
+                # - "four"
+                # + "FOUR"
+
+                expect(line_tree_with_elisions).to match(
+                  [
+                    an_expected_elision(
+                      indentation_level: 0,
+                      children: [
+                        an_expected_line(
+                          type: :noop,
+                          indentation_level: 0,
+                          value: %("one")
+                        ),
+                        an_expected_line(
+                          type: :noop,
+                          indentation_level: 0,
+                          value: %("two")
+                        )
+                      ]
+                    ),
+                    an_expected_line(
+                      type: :noop,
+                      indentation_level: 0,
+                      value: %("three")
+                    ),
+                    an_expected_line(
+                      type: :delete,
+                      indentation_level: 0,
+                      value: %("four")
+                    ),
+                    an_expected_line(
+                      type: :insert,
+                      indentation_level: 0,
+                      value: %("FOUR")
+                    )
+                  ]
+                )
+              end
+            end
+
             context 'and the only noops that exist are above the only non-noops that exist' do
               it 'elides the beginning of the noop so as to put it at the maximum' do
                 # Diff:
