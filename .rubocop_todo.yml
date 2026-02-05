@@ -18,6 +18,8 @@ Metrics/AbcSize:
 # AllowedMethods: refine
 Metrics/BlockLength:
   Max: 5536
+  Exclude:
+    - 'spec/unit/core/tiered_lines_elider_spec.rb'
 
 # Offense count: 2
 # Configuration parameters: CountBlocks, CountModifierForms, Max.
