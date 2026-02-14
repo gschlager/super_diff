@@ -7,8 +7,8 @@
 - Add max major version constraints to dependencies. [#296](https://github.com/splitwise/super_diff/pull/296)
 - Remove unused `syntax_tree` gems from development. [#297](https://github.com/splitwise/super_diff/pull/297)
 - Simplify tiered lines elider. [#302](https://github.com/splitwise/super_diff/pull/302)
-- Support elision for flat line trees. [#300](https://github.com/splitwise/super_diff/pull/300)
-- Fix integration snippet indentation. [#299](https://github.com/splitwise/super_diff/pull/299)
+- Support elision for flat line trees. [#300](https://github.com/splitwise/super_diff/pull/300) by [@gschlager](https://github.com/gschlager)
+- Fix integration snippet indentation. [#299](https://github.com/splitwise/super_diff/pull/299) by [@gschlager](https://github.com/gschlager)
 
 ## 0.18.0 - 2025-12-05
 
