@@ -8,6 +8,7 @@
 - Remove unused `syntax_tree` gems from development. [#297](https://github.com/splitwise/super_diff/pull/297)
 - Simplify tiered lines elider. [#302](https://github.com/splitwise/super_diff/pull/302)
 - Support elision for flat line trees. [#300](https://github.com/splitwise/super_diff/pull/300)
+- Fix integration snippet indentation. [#299](https://github.com/splitwise/super_diff/pull/299)
 
 ## 0.18.0 - 2025-12-05
 
